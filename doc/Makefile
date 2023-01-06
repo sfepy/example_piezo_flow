@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = largedef_porous
+SPHINXPROJ    = pieze_flow
 SOURCEDIR     = .
 BUILDDIR      = _build
 

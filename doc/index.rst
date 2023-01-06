@@ -2,104 +2,124 @@
    :maxdepth: 2
    :caption: Contents:
 
-Two-scale numerical simulation of a large deforming fluid-saturated porous structure
-====================================================================================
+Homogenization of peristaltic flows in piezoelectric porous media
+=================================================================
 
-Mathematical model
-------------------
+Model
+-----
 
-We consider a fluid-saturated porous medium undergoing large deformations. A
-double porous medium is constituted by a hyperelastic skeleton and an
-incompressible viscous fluid. Within the Eulerian framework related to the
-current deformed configuration, the two-scale homogenization approach is
-applied to a linearized model discretized in time, being associated with an
-incremental formulation. The homogenization procedure of the linearized
-equations provides effective (homogenized) material properties which are
-computed to constitute the incremental macroscopic problem. The multiscale
-model is derived and discussed in [LukesRohan2020]_.
+This example shows the numerical implementation of the homogenized problem of
+peristaltic flow in porous piezoelectric materials saturated by electrically
+inert fluid. The solid part of a representative volume element consists of the
+piezoelectric skeleton with embedded conductors. The pore fluid in the periodic
+structure constitutes a single connected domain. The electrodes control the
+electric field at the pore level, so that the peristaltic wave of the
+deformation influences the pore volume and can control the direction of fluid
+flow. For details, see [RohanLukes2023]_.
+
 
 
 Implementation
 --------------
 
-The local subproblems defined within the reference cell and the global
-macroscopic equations are discretized and solved by means of the finite element
-method. The macroscopic equations and the incremental ULF algorithm are defined
-in :code:`largedef_porous_mac.py`. The finite element mesh representing the
-macroscopic domain and the applied boundary conditions are depicted in
-:numref:`fig_macro`.
-
-.. :code:`macro_mesh_3x2.vtk`
-
-.. _fig_macro:
-
-.. figure:: _static/displ_boundary_conditions.png
-   :width: 400px
-   :align: center
-   :figclass: align-center
-
-   Boundary conditions applied to the macroscopic 2D sample.
-
-The local microscopic problems and the homogenized coefficients are specified
-in :code:`largedef_porous_mic.py`. The domain, on which the microscopic
-calculations are performed, is shown in :numref:`fig_micro`. It consists of the
-porous matrix :math:`Y_3` and two fluid channels :math:`Y_1`, :math:`Y_2`.
-
-The macro-micro coupling is governed by the SfePy homogenization engine, see
-[CimrmanLukesRohan2019]_, which ensures efficient evaluation of the homogenized
-coefficients demanded by the macroscopic simulation.
-
-.. :code:`micro_mesh.vtk`
+The homogenized coefficients, their sensitivities, and the microscopic
+subproblems are defined in :code:`poropiezo_micro.py` and
+:code:`poropiezo_micro_sa.py`. The periodic reference cell, on which the
+microscopic subproblems are solved, is depicted in :numref:`fig_micro`.
+The FE mesh of the reference cell is stored in :code:`mesh_micro_1D.vtk`.
 
 .. _fig_micro:
 
 .. figure:: _static/micro_geom.png
-   :width: 200px
+   :width: 500px
    :align: center
    :figclass: align-center
 
-   Decomposition of the microscopic domain :math:`Y`.
+   Decomposition of the microscopic reference cell.
+
+The problem description file coding the homogenized macroscopic equations
+invokes :code:`poropiezo_macro_nl.py`. The FE mesh related to the macroproblem
+is defined in :code:`mesh_macro_20x1x1.vtk`. The applied boundary conditions are shown
+in :numref:`fig_macro_bc`, and the prescribed electric potential, inducing
+the deformation and thus the fluid flow through the structure, is depicted in
+:numref:`fig_macro_phi`.
+
+.. _fig_macro_bc:
+
+.. figure:: _static/macro_geom_bc.png
+   :width: 500px
+   :align: center
+   :figclass: align-center
+
+   Boundary conditions applied to the macroscopic sample.
+
+.. _fig_macro_phi:
+
+.. figure:: _static/fig_bolus_1Dtube_l_20.png
+   :width: 400px
+   :align: center
+   :figclass: align-center
+
+   Electric potential at selected times.
 
 
 Running simulation
 ------------------
 
 To run the multiscale numerical simulation, download the
-`archive <https://github.com/sfepy/example_largedef_porous/archive/v1.zip>`_,
-unpack it in the main SfePy directory and type:
+`archive <https://github.com/sfepy/example_piezo_flow/archive/v1.zip>`_,
+unpack it and type:
 
 .. code::
 
-   ./simple.py example_largedef_porous-1/largedef_porous_mac.py
+   sfepy-run example_piezo_flow-1/piezo_macro_nl.py
 
-This invokes the time-stepping solver for the problem at the macroscopic level
-which calls the homogenization engine evaluating the homogenized coefficients
-defined in :code:`largedef_porous_mic.py`. The coefficients are evaluated in
-several embedded loops associated with the time steps and the macroscopic
-integration points, see [LukesRohan2020]_ for details.
+In the first step, SfePy invokes the homogenization engine, see
+[CimrmanLukesRohan2019]_, which solves the microscopic subproblems and
+evaluates the homogenized coefficients required at the macroscopic level. In
+the second step, the time-stepping solver resolves the macroscopic problem for
+given boundary conditions, and the reconstruction of the displacement,
+pressure, and velocity fields at the microscopic level is performed.
 
-The computed macroscopic results can be visualized using the :code:`resview.py`
-post-processing script as follows:
+The reconstructed pressure and velocity fields are shown in
+:numref:`fig_results_rec`. 
 
-.. code::
+.. _fig_results_rec:
 
-   ./resview.py example_largedef_porous-1/results/macro_mesh_3x2_*.vtk -w u0 -f cauchy_stress:p0 -v "0,0" -s 18
-
-.. figure:: _static/results1.png
-   :width: 700px
+.. figure:: _static/pressure_velocity_reconstructed.png
+   :width: 600px
    :align: center
    :figclass: align-center
 
-   Distribution of the Cauchy stress magnitude (average values per element) in
-   the macroscopic deformed domain at time step 18.
+   Reconstructed pressure and velocity fields at a given time step.
+
+The above figure was generated by the post-processing script as follows:
+
+.. code::
+
+   sfepy-view output/mesh_micro_1D.recovered_0.001.040_Yf.vtk -f p:o.4:p0 w:g:f5e-4:p1 0:o.4:p1 --camera-position="0.101136,-0.0016623,0.00179498,0.0917673,0.00652579,-0.000337183,-0.1227,0.116262,0.98561"
+
+This simulation demonstrates the ability of the porose piezoelectric structure
+to transport fluid against the pressure drop given by the prescribed boundary
+pressures. The dependence of the transported fluid on the magnitude of the
+electrical potential is depicted in :numref:`fig_results_flux`.
+
+.. _fig_results_flux:
+
+.. figure:: _static/cflux_varying_phi.png
+   :width: 400px
+   :align: center
+   :figclass: align-center
+
+   Dependence of cumulative flux on the amplitude of the prescribed electric potential.
 
 
 References
 ----------
 
-.. [LukesRohan2020] Lukeš V. Rohan E.
-   Homogenization of large deforming fluid-saturated porous structures
-   `arXiv:2012.03730 <https://arxiv.org/abs/2012.03730>`_
+.. [RohanLukes2023] Rohan E., Lukeš V.
+   xxx,
+   `xxx <https://arxiv.org/abs/xxx>`_
 
 .. [CimrmanLukesRohan2019] Cimrman R., Lukeš V., Rohan E.
    Multiscale finite element calculations in Python using SfePy.

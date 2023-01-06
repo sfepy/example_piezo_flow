@@ -54,8 +54,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'sfepy_example_largedef_porous'
-copyright = u'2021, Vladimír Lukeš, Eduard Rohan'
+project = u'sfepy_example_piezo_flow'
+copyright = u'2023, Vladimír Lukeš, Eduard Rohan'
 author = u'Vladimír Lukeš, Eduard Rohan'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -102,11 +102,11 @@ html_context = {
     # Set the following variables to generate the resulting github URL for each page.
     # Format Template: https://{{ github_host|default("github.com") }}/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ suffix }}
     'github_user': 'vlukes',
-    'github_repo': 'example_largedef_porous',
+    'github_repo': 'example_piezo_flow',
     'menu_links_name': 'Connections',
     'menu_links': [
-        ('<i class="fa fa-github fa-fw"></i> Source Code', 'https://github.com/sfepy/example_largedef_porous'),
-        ('<i class="fa fa-file-text fa-fw"></i> The Paper', 'https://arxiv.org/abs/2012.03730'),
+        ('<i class="fa fa-github fa-fw"></i> Source Code', 'https://github.com/sfepy/example_piezo_flow'),
+        ('<i class="fa fa-file-text fa-fw"></i> The Paper', 'https://arxiv.org/abs/XXX'),
         ('<i class="fa fa-external-link fa-fw"></i> SfePy', 'https://sfepy.org'),
     ],
 }
@@ -138,7 +138,7 @@ html_style = 'sfepy.css'
 # html_sidebars = {}
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'example_largedef_porous'
+htmlhelp_basename = 'example_piezo_flow'
 
 # -- Options for LaTeX output ---------------------------------------------
 
