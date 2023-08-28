@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = pieze_flow
+SPHINXPROJ    = piezo_flow
 SOURCEDIR     = .
 BUILDDIR      = _build
 

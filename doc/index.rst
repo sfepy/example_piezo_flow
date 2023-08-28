@@ -18,7 +18,6 @@ deformation influences the pore volume and can control the direction of fluid
 flow. For details, see [RohanLukes2023]_.
 
 
-
 Implementation
 --------------
 
