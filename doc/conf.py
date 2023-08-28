@@ -106,7 +106,7 @@ html_context = {
     'menu_links_name': 'Connections',
     'menu_links': [
         ('<i class="fa fa-github fa-fw"></i> Source Code', 'https://github.com/sfepy/example_piezo_flow'),
-        ('<i class="fa fa-file-text fa-fw"></i> The Paper', 'https://arxiv.org/abs/XXX'),
+        ('<i class="fa fa-file-text fa-fw"></i> The Paper', 'https://arxiv.org/abs/2304.05393'),
         ('<i class="fa fa-external-link fa-fw"></i> SfePy', 'https://sfepy.org'),
     ],
 }
