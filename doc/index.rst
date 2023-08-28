@@ -117,8 +117,8 @@ References
 ----------
 
 .. [RohanLukes2023] Rohan E., Lukeš V.
-   xxx,
-   `xxx <https://arxiv.org/abs/xxx>`_
+   Homogenization of peristaltic flows in piezoelectric porous media. Preprint arXiv:2304.05393, 2023,
+   `DOI: 10.48550/arXiv.2304.05393 <https://doi.org/10.48550/arXiv.2304.05393>`_
 
 .. [CimrmanLukesRohan2019] Cimrman R., Lukeš V., Rohan E.
    Multiscale finite element calculations in Python using SfePy.
